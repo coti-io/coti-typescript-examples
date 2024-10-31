@@ -27,19 +27,19 @@ createWeb3Modal({
   ethersConfig,
   enableOnramp: false,
   chains: [{
-    chainId: 13068200,
-    name: 'COTI Devnet',
+    chainId: 7082400,
+    name: 'COTI Testnet',
     currency: 'COTI',
-    explorerUrl: 'https://explorer-devnet.coti.io',
-    rpcUrl: 'https://devnet.coti.io/rpc'
+    explorerUrl: 'https://testnet.cotiscan.io',
+    rpcUrl: 'https://testnet.coti.io/rpc'
   }],
   allowUnsupportedChain: true,
   defaultChain: {
-    chainId: 13068200,
-    name: 'COTI Devnet',
+    chainId: 7082400,
+    name: 'COTI Testnet',
     currency: 'COTI',
-    explorerUrl: 'https://explorer-devnet.coti.io/',
-    rpcUrl: 'https://devnet.coti.io/rpc'
+    explorerUrl: 'https://testnet.cotiscan.io',
+    rpcUrl: 'https://testnet.coti.io/rpc'
   },
   projectId: 'COTI_REMIX_PLUGIN',
   enableAnalytics: false, // Optional - defaults to your Cloud configuration
