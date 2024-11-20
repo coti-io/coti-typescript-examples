@@ -1,10 +1,10 @@
 import {
     buildInputText,
     buildStringInputText,
-    decryptRSA,
     decryptString,
     decryptUint,
     generateRSAKeyPair,
+    recoverUserKey,
     sign
 } from "@coti-io/coti-sdk-typescript"
 import { Contract, JsonRpcProvider, keccak256, Wallet } from "ethers"
@@ -12,8 +12,8 @@ import dotenv from "dotenv"
 
 dotenv.config()
 
-const RPC_URL = 'https://devnet.coti.io/rpc'
-const ONBOARD_CONTRACT_ADDRESS = '0x413370ed41FB9EE3aea0B1B91FD336cC0be1Bad6'
+const RPC_URL = 'https://testnet.coti.io/rpc'
+const ONBOARD_CONTRACT_ADDRESS = '0x60eA13A5f263f77f7a2832cfEeF1729B1688477c'
 const ONBOARD_CONTRACT_ABI = [
     {
         "anonymous": false,
@@ -27,7 +27,13 @@ const ONBOARD_CONTRACT_ABI = [
             {
                 "indexed": false,
                 "internalType": "bytes",
-                "name": "userKey",
+                "name": "userKey1",
+                "type": "bytes"
+            },
+            {
+                "indexed": false,
+                "internalType": "bytes",
+                "name": "userKey2",
                 "type": "bytes"
             }
         ],
@@ -67,7 +73,7 @@ async function onboard(wallet: Wallet) {
 
     const decodedLog = accountOnboardContract.interface.parseLog(receipt.logs[0])
 
-    return decryptRSA(rsaKeyPair.privateKey, decodedLog!.args.userKey.substring(2))
+    return recoverUserKey(rsaKeyPair.privateKey, decodedLog!.args.userKey1.substring(2), decodedLog!.args.userKey2.substring(2))
 }
 
 function encryptDecryptUint(plaintext: bigint, wallet: Wallet, userKey: string) {

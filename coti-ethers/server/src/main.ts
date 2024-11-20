@@ -18,7 +18,7 @@ import {nativeTransfer} from "./examples/nativeTransfer";
 import { onChainDatabaseExample } from "./examples/onChainDatabase";
 
 async function main() {
-    const provider = getDefaultProvider(CotiNetwork.Devnet);
+    const provider = getDefaultProvider(CotiNetwork.Testnet);
     if (!await isProviderConnected(provider))
         throw Error('provider not connected')
     await printNetworkDetails(provider)
