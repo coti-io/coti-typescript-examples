@@ -11,7 +11,7 @@
     },
     "devDependencies": {
       "@coti-io/coti-ethers": "0.1.1-b",
-      "@coti-io/coti-contracts-examples": "git+https://github.com/coti-io/coti-contracts-examples.git#8d5816ef19c15ec53449acfa3a813e16a3a3bb69",
+      "@coti-io/coti-contracts-examples": "0.1.0",
       "dotenv": "^16.4.5",
       "ethers": "^6.12.1",
       "ts-node": "^10.9.2",
