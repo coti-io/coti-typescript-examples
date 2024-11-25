@@ -10,8 +10,8 @@
       "onChainDatabase": "ts-node src/main.ts onChainDatabase"
     },
     "devDependencies": {
-      "@coti-io/coti-ethers": "1.0.1-b",
-      "@coti-io/coti-contracts-examples": "1.0.0",
+      "@coti-io/coti-ethers": "1.0.2",
+      "@coti-io/coti-contracts-examples": "1.0.2",
       "dotenv": "^16.4.5",
       "ethers": "^6.12.1",
       "ts-node": "^10.9.2",
