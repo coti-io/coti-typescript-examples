@@ -48,6 +48,7 @@ createWeb3Modal({
 
 function App() {
   const [aesKey, setAesKey] = useState('')
+  const [txPending, setTxPending] = useState(false)
   const {walletProvider} = useWeb3ModalProvider()
 
   async function onboard() {
@@ -57,18 +58,24 @@ function App() {
 
     const signer = await ethersProvider.getSigner()
 
+    setTxPending(true)
+
     await signer.generateOrRecoverAes()
 
     const key = signer.getUserOnboardInfo()
 
     setAesKey(key?.aesKey!)
+
+    setTxPending(false)
   }
 
   return (
     <div className="App">
+      <h1>COTI Browser Onboard Example</h1>
       <w3m-button />
       <button onClick={async () => await onboard()}>onboard</button>
-      <p>AES KEY: {aesKey}</p>
+      <h3>AES KEY: {aesKey}</h3>
+      { txPending ? <p>Tx pending...</p> : <></> }
     </div>
   );
 }
