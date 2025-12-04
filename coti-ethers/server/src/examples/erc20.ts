@@ -1,7 +1,7 @@
 import * as fs from "fs"
 import * as path from "path"
 
-import {itUint, Provider, Wallet} from "@coti-io/coti-ethers"
+import {itUint256, Provider, Wallet} from "@coti-io/coti-ethers"
 import {PrivateToken} from "@coti-io/coti-contracts-examples/typechain-types"
 import {assert} from "../util/assert"
 import {deploy} from "../util/contracts"
@@ -10,7 +10,7 @@ const GAS_LIMIT = 12000000
 
 async function assertBalance(token: PrivateToken, amount: bigint, user: Wallet) {
     const ctBalance = await token["balanceOf(address)"](user.address)
-    let balance = await user.decryptValue(ctBalance) as bigint
+    let balance = await user.decryptValue256(ctBalance) as bigint
     assert(balance === amount, `Expected balance to be ${amount}, but got ${balance}`)
     return balance
 }
@@ -22,7 +22,7 @@ async function assertAllowance(
     spenderAddress: string
 ) {
     const ctAllowance = (await token["allowance(address,address)"](owner.address, spenderAddress))[1]
-    let allowance = await owner.decryptValue(ctAllowance)
+    let allowance = await owner.decryptValue256(ctAllowance)
     assert(allowance === amount, `Expected allowance to be ${amount}, but got ${allowance}`)
 }
 
@@ -79,11 +79,11 @@ async function transfer(
 ) {
     console.log("************* Private transfer ", transferAmount, " from my account to Alice *************")
 
-    const itAmount = await owner.encryptValue(transferAmount, await token.getAddress(), token["transfer(address,(uint256,bytes))"].fragment.selector) as itUint
+    const itAmount = await owner.encryptValue256(transferAmount, await token.getAddress(), token.interface.getFunction("transfer(address,((uint256,uint256),bytes))").selector) as itUint256
 
     await (
         await token
-            ["transfer(address,(uint256,bytes))"]
+            .getFunction("transfer(address,((uint256,uint256),bytes))")
             (alice.address, itAmount, { gasLimit: GAS_LIMIT })
     ).wait()
 
@@ -98,11 +98,11 @@ async function approve(
 ) {
     console.log("************* Private approve", approveAmount, " to Alice address *************")
 
-    const itAmount = await owner.encryptValue(approveAmount, await token.getAddress(), token["approve(address,(uint256,bytes))"].fragment.selector) as itUint
+    const itAmount = await owner.encryptValue256(approveAmount, await token.getAddress(), token.interface.getFunction("approve(address,((uint256,uint256),bytes))").selector) as itUint256
 
     await (
         await token
-            ["approve(address,(uint256,bytes))"]
+            .getFunction("approve(address,((uint256,uint256),bytes))")
             (alice.address, itAmount, { gasLimit: GAS_LIMIT })
     ).wait()
 
@@ -118,11 +118,11 @@ async function transferFrom(
 ) {
     console.log("************* Private transferFrom ", transferAmount, " from my account to Alice *************")
 
-    const itAmount = await owner.encryptValue(BigInt(transferAmount), await token.getAddress(), token["transferFrom(address,address,(uint256,bytes))"].fragment.selector) as itUint
+    const itAmount = await owner.encryptValue256(BigInt(transferAmount), await token.getAddress(), token.interface.getFunction("transferFrom(address,address,((uint256,uint256),bytes))").selector) as itUint256
     
     await (
         await token
-            ["transferFrom(address,address,(uint256,bytes))"]
+            .getFunction("transferFrom(address,address,((uint256,uint256),bytes))")
             (owner.address, alice.address, itAmount, { gasLimit: GAS_LIMIT })
     ).wait()
 
